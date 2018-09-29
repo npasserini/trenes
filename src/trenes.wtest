@@ -1,0 +1,90 @@
+import trenes.*
+import locomotoras.*
+import vagones.*
+import depositos.*
+
+describe "Trenes" {
+  method crearTren() {
+    var vagones = []
+    var locomotoras = []
+    const vagonCarga = new VagonCarga()
+    vagonCarga.cargaMaxima(100)
+    vagones.add(vagonCarga)
+    vagones.add(new VagonPasajeros(10, 2))
+    vagones.add(new VagonPasajeros(10, 3))    
+    locomotoras.add(new Locomotora(1000, 12000, 80))
+    locomotoras.add(new Locomotora(2000, 11000, 40))
+    return new Tren(locomotoras, vagones)
+  }  
+  
+  test "VagonPasajeros: Si ancho es 2m y largo 10m, cantidad de pasajeros es 80" {
+    var vagon = new VagonPasajeros(10, 2)
+    assert.equals(80, vagon.cantidadDePasajeros())
+  }
+  
+  test "VagonPasajeros: Si ancho es 3m y largo 10m, cantidad de pasajeros es 100" {
+    var vagon = new VagonPasajeros(10, 3)
+    assert.equals(100, vagon.cantidadDePasajeros())
+  }
+  
+  test "VagonPasajeros: Si puede llevar 80 pasajeros, su peso maximo es 6400" {
+    var vagon = new VagonPasajeros(10, 2)
+    assert.equals(6400, vagon.pesoMaximo())
+  }
+  
+  test "VagonCarga: Devuelve correctamente su carga maxima" {
+    var vagon = new VagonCarga()
+    vagon.cargaMaxima(100)
+    assert.equals(100, vagon.cargaMaxima())
+  }
+  
+  test "VagonCarga: Si su carga maxima es 100, su peso maximo es 260" {
+    var vagon = new VagonCarga()
+    vagon.cargaMaxima(100)
+    assert.equals(260, vagon.pesoMaximo())
+  }
+  
+  test "Locomotora: Si peso es 1000, peso maximo 12000 y velocidad maxima 80, arrastre es 11000" {
+    var locomotora = new Locomotora(1000, 12000, 80)
+    assert.equals(11000, locomotora.cuantoPuedeArrastrar())
+  }
+  
+  test "Tren: cantidad de pasajeros total correctamente devuelta" {
+    var tren = self.crearTren()
+    assert.equals(180, tren.cantidadDePasajeros())
+  }
+  
+  test "Tren: cantidad de vagones livianos correctamente devuelta" {
+    var tren = self.crearTren()
+    assert.equals(1, tren.cantidadDeVagonesLivianos())
+  }
+  
+  test "Tren: velocidad maxima correctamente devuelta" {
+    var tren = self.crearTren()
+    assert.equals(40, tren.velocidadMaxima())
+  }
+  
+  test "Tren: es eficiente correctamente devuelto" {
+    var tren = self.crearTren()
+    assert.that(!tren.esEficiente())
+  }
+  
+  test "Tren: cuantoEmpujeFalta correctamente devuelto" {
+    var tren = self.crearTren()
+    assert.equals(0, tren.cuantoEmpujeFalta())
+  }
+  
+  test "Deposito: vagonesMasPesados correctamente devuelto" {
+    var deposito = new Deposito()
+    deposito.agregarFormacion(self.crearTren())
+    assert.equals([new VagonPasajeros(10, 3)], deposito.vagonesMasPesados())
+  }
+  
+  test "Deposito: necesitaConductorExperimentado correctamente devuelto" {
+    var deposito = new Deposito()
+    deposito.agregarFormacion(self.crearTren())
+    assert.that(deposito.necesitaConductorExperimentado())
+  }
+  
+  
+}
