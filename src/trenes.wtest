@@ -15,7 +15,19 @@ describe "Trenes" {
     locomotoras.add(new Locomotora(1000, 12000, 80))
     locomotoras.add(new Locomotora(2000, 11000, 40))
     return new Tren(locomotoras, vagones)
-  }  
+  }
+  
+  method crearTrenSinEmpuje() {
+    var vagones = []
+    var locomotoras = []
+    const vagonCarga = new VagonCarga()
+    vagonCarga.cargaMaxima(100)
+    vagones.add(vagonCarga)
+    vagones.add(new VagonPasajeros(10, 2))
+    vagones.add(new VagonPasajeros(10, 3)) 
+    locomotoras.add(new Locomotora(2000, 11000, 40))
+    return new Tren(locomotoras, vagones)
+  }
   
   test "VagonPasajeros: Si ancho es 2m y largo 10m, cantidad de pasajeros es 80" {
     var vagon = new VagonPasajeros(10, 2)
@@ -76,8 +88,9 @@ describe "Trenes" {
   
   test "Deposito: vagonesMasPesados correctamente devuelto" {
     var deposito = new Deposito()
+    var vagon = new VagonPasajeros(10, 3)
     deposito.agregarFormacion(self.crearTren())
-    assert.equals([new VagonPasajeros(10, 3)], deposito.vagonesMasPesados())
+    assert.equals([vagon], deposito.vagonesMasPesados())
   }
   
   test "Deposito: necesitaConductorExperimentado correctamente devuelto" {
@@ -86,5 +99,20 @@ describe "Trenes" {
     assert.that(deposito.necesitaConductorExperimentado())
   }
   
+  test "Deposito: agregarLocomotoraATren no agrega nada si no hace falta" {
+    var deposito = new Deposito()
+    deposito.agregarFormacion(self.crearTren())
+    deposito.agregarLocomotora(new Locomotora(1500, 20000, 85))
+    deposito.agregarLocomotoraATren()
+    assert.equals(1, deposito.locomotoras().size())
+  }
+  
+  test "Deposito: agregarLocomotoraATren agrega correctamente a formacion que le falta empuje" {
+    var deposito = new Deposito()
+    deposito.agregarFormacion(self.crearTrenSinEmpuje())
+    deposito.agregarLocomotora(new Locomotora(1500, 20000, 85))
+    deposito.agregarLocomotoraATren()
+    assert.equals(0, deposito.locomotoras().size())
+  }
   
 }

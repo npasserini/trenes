@@ -49,4 +49,8 @@ class Tren {
     }
     return false
   }
+  
+  method agregarLocomotora(_locomotora) {
+    locomotoras.add(_locomotora)
+  }
 }
