@@ -67,7 +67,7 @@ El total de pasajeros que puede transportar una formación.
     forma tal que la formación pueda moverse. Si la formación ya puede moverse,
     entonces no se hace nada. Si no, se le agrega una locomotora suelta del depósito
     cuyo arrastre útil sea mayor o igual a los kilos de empuje que le faltan a la formación.
-    Si no hay ninguna locomotora suelta que cumpla esta condición, no se hace nada.
+    Si no hay ninguna locomotora suelta que cumpla esta condición, lanza excepción.
 
 Indicar qué clases se necesitan, qué variables de instancia se necesitan en cada clase, qué
 mensajes van a entender las instancias de cada clase, y escribir los métodos

@@ -1,0 +1,39 @@
+import trenes.*
+import locomotoras.*
+import vagones.*
+
+describe "Trenes" {
+
+	const vagonChico = new VagonPasajeros(largo = 3.75, ancho = 2)
+	const vagonGrande = new VagonPasajeros(largo = 10, ancho = 3)
+	const vagonCarga = new VagonCarga(cargaMaxima = 100)
+
+	const loco1 = new Locomotora(peso = 1000, arrastre = 12000)
+	const loco2 = new Locomotora(peso = 10000, arrastre = 10000)
+
+	const tren = new Tren(
+		vagones = [ vagonChico, vagonGrande, vagonCarga ],
+		locomotoras = [ loco2 ]
+	)
+
+	fixture {
+		deposito.agregarFormacion(tren)
+	}
+	
+	test "Deposito.necesitaConductorExperimentado" {
+		assert.that(deposito.necesitaConductorExperimentado())
+	}
+
+	test "Deposito.agregarLocomotoraATren => se agrega correctamente" {
+		deposito.agregarLocomotora(loco1)
+		assert.equals(1, deposito.locomotoras().size())
+
+		deposito.agregarLocomotoraATren(tren)
+		assert.equals(0, deposito.locomotoras().size())
+	}
+
+	test "Deposito.agregarLocomotoraATren => no hay locomotora" {
+		assert.throwsException { deposito.agregarLocomotoraATren(tren) }
+	}
+}
+

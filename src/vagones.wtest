@@ -1,0 +1,25 @@
+import vagones.*
+import locomotoras.*
+
+describe "Vagones" {
+	
+	const vagonChico = new VagonPasajeros(largo = 3.75, ancho = 2)
+	const vagonGrande = new VagonPasajeros(largo = 10, ancho = 3)
+	const vagonCarga = new VagonCarga(cargaMaxima = 100)
+
+	test "VagonPasajeroscantidadDePasajeros" {
+		assert.equals(30, vagonChico.cantidadDePasajeros())
+		assert.equals(100, vagonGrande.cantidadDePasajeros())
+	}
+
+	test "Vagon.peso" {
+		assert.equals(2400, vagonChico.peso())
+		assert.equals(8000, vagonGrande.peso())
+		assert.equals(260, vagonCarga.peso())
+	}
+
+	test "Vagon.esLiviano" {
+		assert.that(vagonChico.esLiviano())
+		assert.notThat(vagonGrande.esLiviano())
+	}
+}

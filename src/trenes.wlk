@@ -1,56 +1,28 @@
-/**
- * Clase Tren
- */
 class Tren {
-  var locomotoras
-  const vagones
-  
-  constructor(_locomotoras, _vagones) {
-    locomotoras = _locomotoras
-    vagones = _vagones
-  }
-  
-  method cantidadDePasajeros() {
-    return vagones.sum({ vagon => vagon.cantidadDePasajeros() })
-  }
-  
-  method cantidadDeVagonesLivianos() {
-    return vagones.filter({ vagon => vagon.pesoMaximo() < 2500 }).size()
-  }
-  
-  method velocidadMaxima() {
-    return locomotoras.sortedBy({ loc1, loc2 => loc1.velocidadMaxima() < loc2.velocidadMaxima() }).first().velocidadMaxima()
-  }
-  
-  method esEficiente() {
-    return locomotoras.all({ locomotora => locomotora.cuantoPuedeArrastrar() > locomotora.peso() * 5 })
-  }
-  
-  method cuantoEmpujeFalta() {
-    var pesoMaximoVagones = vagones.sum({ vagon => vagon.pesoMaximo() })
-    var arrastreLocomotoras = locomotoras.sum({ locomotora => locomotora.cuantoPuedeArrastrar() })
-    if (arrastreLocomotoras < pesoMaximoVagones) {
-      return (pesoMaximoVagones - arrastreLocomotoras)
-    }
-    return 0
-  }
-  
-  method vagonMasPesado() {
-    return vagones.sortedBy({ vag1, vag2 => vag1.pesoMaximo() > vag2.pesoMaximo()}).first()
-  }
-  
-  method esCompleja() {
-    var totalUnidades = vagones.size() + locomotoras.size()
-    var pesoVagones = vagones.sum({ vagon => vagon.pesoMaximo() })
-    var pesoLocomotoras = locomotoras.sum({ locomotora => locomotora.peso() })
-    var pesoTotal = pesoVagones + pesoLocomotoras
-    if (totalUnidades > 20 || pesoTotal > 10000) {
-      return true
-    }
-    return false
-  }
-  
-  method agregarLocomotora(_locomotora) {
-    locomotoras.add(_locomotora)
-  }
+	const property locomotoras
+	const property vagones
+
+	method cantidadDePasajeros() {
+		return vagones.sum({ vagon => vagon.cantidadDePasajeros() })
+	}
+	
+	// Punto 1
+	method cantidadDeVagonesLivianos() = vagones.count { vagon => vagon.esLiviano() } 
+
+	// Punto 4
+	method puedeMoverse() = self.arrastreFaltante() == 0
+
+	method arrastreFaltante() = (self.peso() - self.arrastre()).max(0)  
+
+	method arrastre() = locomotoras.sum { locomotora => locomotora.arrastre() }
+	
+	// Punto 7 (parcial)
+	method esCompleja() = self.unidades().size() > 20 or self.peso() > 1000
+
+	method peso() = self.unidades().sum { unidad => unidad.peso() }
+
+	method unidades() = locomotoras + vagones
+
+	// Punto 8 (parcial)
+	method agregarLocomotora(locomotora) { locomotoras.add(locomotora) }
 }
