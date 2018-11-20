@@ -1,0 +1,22 @@
+{
+  "name": "trenes",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:npasserini/trenes.git",
+  "author": "Nicolás Passerini <npasserini@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest --watch"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-jest": "^23.6.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0",
+    "jest": "^23.6.0",
+    "regenerator-runtime": "^0.13.1"
+  },
+  "dependencies": {
+    "ramda": "^0.26.0"
+  }
+}
